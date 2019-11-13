@@ -37,7 +37,7 @@ class VerifiedRequest extends Command
      */
     public function handle()
     {
-        $tiempo=DB::table('cuota_request')
-                ->update(['actual'=>0]);
+        DB::table('cuota_request')
+            ->update(['actual'=>0]);
     }
 }

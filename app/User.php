@@ -50,7 +50,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function verificaRequest(){
         return DB::table('cuota_request')
-        ->select(DB::raw('((cuota_request.max)-(cuota_request.actual)) as disponible'))
+        ->select(DB::raw('cuota_request.actual as disponible'))
         ->where('cuota_request.user_id',$this->id)
         ->first();
 
@@ -67,19 +67,23 @@ class User extends Authenticatable implements JWTSubject
         $datos=$request->input('datos');
        $hits=count($datos);
        if($hits>5000){
-            return 'error';
+            return 'error intentelo mas tarde';
         } else{
         $hits_disponibles=$this->verificaRequest();
-        if($hits>$hits_disponibles->disponible){
-            return 'error';
+        $hits=$hits+$hits_disponibles->disponible;
+        
+        if($hits>5000){
+            return 'error intentelo despues de una hora ';
         }else{  
+        
         foreach ($datos as $valor){
             $cuil=$valor['cuil'];
-            $resultado[]=DB::table('personas')
-            ->select('personas.cuil','personas.estado')
-            ->where('personas.cuil',$cuil)
+            $resultado[]=DB::table('persona')
+            ->select('persona.cuil','persona.estado')
+            ->where('persona.cuil',$cuil)
             ->first();
         }
+        
         $this->setRequest($hits);
             return $resultado;
         }

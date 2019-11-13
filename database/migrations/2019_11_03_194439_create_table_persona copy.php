@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableUsers extends Migration
+class CreateTablePersonaCopy extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,24 @@ class CreateTableUsers extends Migration
     {
         Schema::create('persona', function (Blueprint $table) {
             $table->increments('id');
-            $table->int('cuil');
-            $table->int('estado');
+            $table->text('cuil');
+            $table->integer('estado');
         });
 
-        // DB::table('cuota_request')->insert([
-        //         ['cuil'=>,'estado'=>]
-        // ]);
+    
+
+
+
+    for($i=20000000;$i<50000000;$i++){
+        $estado=rand(1,5);
+        $cuil="20-".$i."-2";
+            DB::table('persona')->insert(
+                 ['cuil'=>$cuil,'estado'=>$estado]
+
+        
+        
+     );
+    }
     }
 
     /**
@@ -31,6 +42,6 @@ class CreateTableUsers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_users');
+        Schema::dropIfExists('persona');
     }
 }
